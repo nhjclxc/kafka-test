@@ -12,7 +12,7 @@ import java.util.Optional;
 @Component
 public class Consumer {
 
-    @KafkaListener(topics = "kafka-test")
+    @KafkaListener(topics = {"kafka-test", "kafka-test2"})
     public void consumer(ConsumerRecord<String, String> record) {
 
         Optional<ConsumerRecord<String, String>> record1 = Optional.ofNullable(record);
@@ -29,5 +29,8 @@ public class Consumer {
             }
 
         }
+
+
+
     }
 }

@@ -29,7 +29,6 @@ public class Producer {
         SendResult<String, String> user1 = kafkaTemplate.send("kafka-test", "user", s).get();
         System.out.println(user1.toString());
 
-
     }
 
 }
