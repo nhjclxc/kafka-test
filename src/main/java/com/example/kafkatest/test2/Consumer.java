@@ -1,5 +1,6 @@
 package com.example.kafkatest.test2;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -20,6 +21,12 @@ public class Consumer {
             String value = record.value();
 
             System.out.println(key + " ,, " + value);
+
+            if ("user".equals(key)){
+                User user = JSON.parseObject(value, User.class);
+                System.out.println("name = " + user.getName());
+                System.out.println("age = " + user.getAge());
+            }
 
         }
     }
