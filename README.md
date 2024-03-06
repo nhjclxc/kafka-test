@@ -2,6 +2,8 @@
 
 kafka-test消息中间件kafka测试
 
+https://kafka.apache.org/
+
 
 https://www.yuque.com/nhjclxc/java/wu9hs8?singleDoc# 《Kafka安装》
 
@@ -25,3 +27,5 @@ https://www.bilibili.com/video/BV1a4411B7V9
 
 
 https://it-blog-cn.com/blogs/qmq/product.html
+
+搭建kafka集群: https://www.yuque.com/nhjclxc/java/bkcdumrm4at7b57n?singleDoc# 《压缩包安装kafka》

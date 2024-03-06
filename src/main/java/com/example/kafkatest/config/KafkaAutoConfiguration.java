@@ -2,6 +2,7 @@ package com.example.kafkatest.config;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,13 +11,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.kafka.ConcurrentKafkaListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.SeekToCurrentErrorHandler;
 import org.springframework.kafka.support.LoggingProducerListener;
@@ -137,5 +137,24 @@ public class KafkaAutoConfiguration {
 		factory.setErrorHandler(new SeekToCurrentErrorHandler(new DeadLetterPublishingRecoverer(template), 3));
 		return factory;
 	}
+
+	@Bean
+	public KafkaListenerContainerFactory<?> batchFactory() {
+		ConcurrentKafkaListenerContainerFactory<Integer, String> factory =
+				new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(consumerFactory());
+		factory.setConcurrency(5);
+		factory.getContainerProperties().setPollTimeout(1000);
+		factory.setBatchListener(true);//设置为批量消费，每个批次数量在Kafka配置参数中设置
+		factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);//设置手动提交ackMode
+		return factory;
+	}
+
+	//消费者工厂
+	@Bean
+	public ConsumerFactory<Integer, String> consumerFactory() {
+		return new DefaultKafkaConsumerFactory<>(this.properties.buildProducerProperties());
+	}
+
 
 }
