@@ -1,5 +1,7 @@
 package com.example.kafkatest.config;
 
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -13,6 +15,9 @@ import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.LoggingProducerListener;
 import org.springframework.kafka.support.ProducerListener;
 import org.springframework.kafka.support.converter.RecordMessageConverter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @ComponentScan(basePackages = "com.example.kafkatest")
 @Configuration(proxyBeanMethods = false)
@@ -71,6 +76,12 @@ public class KafkaAutoConfiguration {
 			factory.setTransactionIdPrefix(transactionIdPrefix);
 		}
 		return factory;
+	}
+
+
+	@Bean
+	public KafkaAdmin admin() {
+		return new KafkaAdmin(this.properties.buildProducerProperties());
 	}
 
 
