@@ -1,9 +1,8 @@
 package com.example.kafkatest.test4;
 
 import com.example.kafkatest.config.KafkaTools;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.ListConsumerGroupsResult;
+import org.apache.kafka.clients.admin.*;
+import org.apache.kafka.common.KafkaFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -51,6 +52,8 @@ public class Producer {
 
     @Autowired
     private KafkaAdmin kafkaAdmin;
+    @Autowired
+    private AdminClient adminClient;
 
     @GetMapping
     public void test() throws ExecutionException, InterruptedException {
@@ -73,6 +76,19 @@ public class Producer {
                 System.out.println("消息发送成功");
             }
         });
+
+        Map<String, Object> config = kafkaAdmin.getConfig();
+
+        System.out.println(config.toString());
+
+
+        ListTopicsResult listTopicsResult = adminClient.listTopics();
+        Set<String> strings = listTopicsResult.names().get();
+        KafkaFuture<Collection<TopicListing>> listings = listTopicsResult.listings();
+        KafkaFuture<Map<String, TopicListing>> mapKafkaFuture = listTopicsResult.namesToListings();
+        System.out.println(mapKafkaFuture);
+
+
     }
 
 }
