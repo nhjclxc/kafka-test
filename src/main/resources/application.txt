@@ -9,15 +9,18 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       # 消息确认方式
-#      acks: 1
+      acks: 1
       # 消息发送失败重试次数
       retries: 10
     consumer:
       # 消费组id
       group-id: ${spring.application.name}-test
       # 是否开启自动提交
-#      enable-auto-commit: false
+      enable-auto-commit: false
       # 自动将偏移量置为earliest、latest、none
+#      earliest 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费
+#      latest 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，消费新产生的该分区下的数据
+#      none topic各分区都存在已提交的offset时，从offset后开始消费；只要有一个分区不存在已提交的offset，则抛出异常
       auto-offset-reset: earliest
       # 每次消费时最大拉取消息条数
       max-poll-records: 500
@@ -25,7 +28,5 @@ spring:
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     listener:
       missing-topics-fatal: false
-      # concurrency就是同组下的消费者个数,就是并发消费的消费数,一般设置值小于分区个数
-      # 消费者数小于分区数
       concurrency: 3
       ack-mode: MANUAL
