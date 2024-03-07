@@ -9,7 +9,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       # 消息确认方式
-#      acks: 1
+      acks: 1
       # 消息发送失败重试次数
       retries: 10
     consumer:

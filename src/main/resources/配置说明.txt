@@ -1,0 +1,5 @@
+
+
+ack = 0 kafka-cluster不需要任何的broker收到消息，就⽴即返回ack给⽣产者，最容易丢消息的，效率是最⾼的
+ack=1（默认）： 多副本之间的leader已经收到消息，并把消息写⼊到本地的log中，才会返回ack给⽣产者，性能和安全性是最均衡的
+ack=-1/all。 ⾥⾯有默认的配置min.insync.replicas=2 (默认为1，推荐配置⼤于等于2)，此时就需要leader和⼀个follower同步完后，才会返回ack给⽣产者（此时集群中有2个broker已完成数据的接收），这种⽅式最安全，但性能最差。
