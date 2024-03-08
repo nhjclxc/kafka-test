@@ -6,6 +6,7 @@ import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.config.ConfigResource;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -21,7 +22,7 @@ public class KafkaTools {
     private static KafkaTools _this;
 
     @Autowired
-    private ConsumerFactory<Long, String> consumerFactory;
+    private ConsumerFactory<String, String> consumerFactory;
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -39,7 +40,7 @@ public class KafkaTools {
      **/
     private static long[] getDescribe(String topic) {
         long[] describe = new long[3];
-        Consumer<Long, String> consumer = createConsumer();
+        Consumer<String, String> consumer = createConsumer();
 
         List<PartitionInfo> partitionInfos = _this.kafkaTemplate.partitionsFor(topic);
         List<TopicPartition> tp = new ArrayList<>();
@@ -67,7 +68,7 @@ public class KafkaTools {
     /**
      * 创建消费者
      **/
-    private static Consumer<Long, String> createConsumer() {
+    private static Consumer<String, String> createConsumer() {
         return _this.consumerFactory.createConsumer();
     }
 
@@ -86,7 +87,7 @@ public class KafkaTools {
         detail.setName(topic);
 
         List<PartInfo> list = new ArrayList<>();
-        Consumer<Long, String> consumer = createConsumer();
+        Consumer<String, String> consumer = createConsumer();
         long[] lag = new long[1];
 
         List<PartitionInfo> partitionInfos = _this.kafkaTemplate.partitionsFor(topic);

@@ -138,23 +138,23 @@ public class KafkaAutoConfiguration {
 		return factory;
 	}
 
-	@Bean
-	public KafkaListenerContainerFactory<?> batchFactory() {
-		ConcurrentKafkaListenerContainerFactory<Integer, String> factory =
-				new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory());
-		factory.setConcurrency(5);
-		factory.getContainerProperties().setPollTimeout(1000);
-		factory.setBatchListener(true);//设置为批量消费，每个批次数量在Kafka配置参数中设置
-		factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);//设置手动提交ackMode
-		return factory;
-	}
+//	@Bean
+//	public KafkaListenerContainerFactory<?> batchFactory() {
+//		ConcurrentKafkaListenerContainerFactory<?, ?> factory =
+//				new ConcurrentKafkaListenerContainerFactory<>();
+//		factory.setConsumerFactory(kafkaConsumerFactory());
+//		factory.setConcurrency(5);
+//		factory.getContainerProperties().setPollTimeout(1000);
+//		factory.setBatchListener(true);//设置为批量消费，每个批次数量在Kafka配置参数中设置
+//		factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);//设置手动提交ackMode
+//		return factory;
+//	}
 
 	//消费者工厂
-	@Bean
-	public ConsumerFactory<Integer, String> consumerFactory() {
-		return new DefaultKafkaConsumerFactory<>(this.properties.buildProducerProperties());
-	}
+//	@Bean
+//	public ConsumerFactory<String, String> consumerFactory() {
+//		return new DefaultKafkaConsumerFactory<>(this.properties.buildProducerProperties());
+//	}
 
 
 }
